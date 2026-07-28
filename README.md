@@ -17,7 +17,7 @@
 ### 1. Клонировать репозиторий
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/kit-kosatka/crm-lead-test.git
 cd crm-lead-test
 ```
 
