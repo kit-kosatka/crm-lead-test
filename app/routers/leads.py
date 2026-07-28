@@ -37,8 +37,8 @@ async def index(request: Request, db: DBSession):
 async def create_lead(
     request: Request,
     db: DBSession,
-    name: str = Form(...),
-    phone: str = Form(...),
+    name: str = Form(""),
+    phone: str = Form(""),
     source: str = Form(...),
     manager: str = Form(...),
     stage: str = Form(...),
