@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Lead Test</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Добавить лида</h1>
+
+    {% if error %}
+        <div class="error">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <form action="/leads" method="post">
+
+        <label>
+            Имя клиента
+            <input
+                type="text"
+                name="name"
+                required
+            >
+        </label>
+
+        <label>
+            Телефон
+            <input
+                type="text"
+                name="phone"
+                required
+            >
+        </label>
+
+        <label>
+            Источник
+            <select name="source">
+                <option value="Холодный">Холодный</option>
+                <option value="Тёплый">Тёплый</option>
+            </select>
+        </label>
+
+        <label>
+            Ответственный
+            <select name="manager">
+                <option value="Лидоруб">Лидоруб</option>
+                <option value="МОП">МОП</option>
+            </select>
+        </label>
+
+        <label>
+            Этап сделки
+            <select name="stage">
+                {% for stage in stages %}
+                    <option value="{{ stage }}">{{ stage }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label class="checkbox">
+            <input type="checkbox" name="requested_tz">
+            Запрошено ТЗ
+        </label>
+
+        <button type="submit">
+            Сохранить
+        </button>
+
+    </form>
+
+    <hr>
+
+    <h2>Лиды</h2>
+
+    {% if leads %}
+
+        {% for lead in leads %}
+
+            <div class="card">
+
+                <h3>{{ lead.name }}</h3>
+
+                <p><strong>Телефон:</strong> {{ lead.phone }}</p>
+                <p><strong>Источник:</strong> {{ lead.source }}</p>
+                <p><strong>Ответственный:</strong> {{ lead.manager }}</p>
+
+                <p>
+                    <strong>Этап:</strong>
+                    {{ lead.stage }}
+                </p>
+
+                <form
+                    action="/leads/{{ lead.id }}/stage"
+                    method="post"
+                    class="stage-form"
+                >
+
+                    <select name="stage">
+
+                        {% for stage in stages %}
+
+                            <option
+                                value="{{ stage }}"
+                                {% if stage == lead.stage %}selected{% endif %}
+                            >
+                                {{ stage }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                    <button type="submit">
+                        Изменить этап
+                    </button>
+
+                </form>
+
+                <p>
+                    <strong>Запрошено ТЗ:</strong>
+                    {% if lead.requested_tz %}
+                        Да
+                    {% else %}
+                        Нет
+                    {% endif %}
+                </p>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>Лидов пока нет.</p>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
